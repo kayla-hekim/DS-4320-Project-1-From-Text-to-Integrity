@@ -17,3 +17,5 @@ By testing text content through measurable word embeddings, numerical representa
 Figure 1: Comparison of Human-Written and AI-Generated Essays by Count and Average Length
 
 ![Figure 1: Comparison of Human-Written and AI-Generated Essays by Count and Average Length](./images/figure_1.png)
+
+*Figure 1. Comparison of human-written and AI-generated essays by count and average word count. Human-written essays appear longer on average, while the dataset contains more human-written samples overall.*
