@@ -18,6 +18,10 @@ This repository contains a Data by Design project 1, focused on early detection 
 **Press Release:** https://github.com/kayla-hekim/DS-4320-Project-1-From-Text-to-Integrity/blob/main/press_release.md
 
 **Data**: https://github.com/kayla-hekim/DS-4320-Project-1-From-Text-to-Integrity/tree/main/data
+1. csv_version: contains all data as csv files
+2. parquet_version: contains all data converted into parquet format
+
+<br>
 
 **Pipeline**: https://github.com/kayla-hekim/DS-4320-Project-1-From-Text-to-Integrity/tree/main/pipeline
 
