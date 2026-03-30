@@ -1,5 +1,5 @@
-<!-- # <a name="press-release_project">Can an Algorithm Tell If a News Article Was Written by a Human or AI? New Research Says Yes.</a> -->
-# Can an Algorithm Tell If a News Article Was Written by a Human or AI? New Research Says Yes.
+# <a name="press-release_project">Can an Algorithm Tell If a News Article Was Written by a Human or AI? New Research Says Yes.</a>
+<!-- # Can an Algorithm Tell If a News Article Was Written by a Human or AI? New Research Says Yes. -->
 
 ## Hook:
 Have you ever read an article from your local news and wondered if it was AI-generated? Word patterns hidden in the text may already hold the answer.<br>
