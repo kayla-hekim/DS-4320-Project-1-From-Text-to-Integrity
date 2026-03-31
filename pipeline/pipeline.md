@@ -124,6 +124,9 @@ Parquet files -> DuckDB use
 
 ```python
 # !pip3 install duckdb # uncomment to download duckdb if you do not have it already
+
+logging.info("------Query------")
+
 import duckdb
 
 con = duckdb.connect("./project1.duckdb")
@@ -323,6 +326,8 @@ from sklearn.model_selection import train_test_split
 
 ```python
 # style features
+logging.info("------Solution Analysis------")
+
 X_style = df[[
     "word_count",
     "sentence_count",
@@ -401,6 +406,14 @@ logging.info(f"generated confusion matrix")
      [  1   0]]
 
 
+    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+
 Accuracy Reflection:
 
 Although the model achieved very high overall accuracy, it failed to correctly classify the single AI-generated essay in the train-test-split's test set. This shows that raw accuracy is misleading for this project because the dataset is extremely imbalanced. With only three AI-generated samples in the full dataset, the classifier has very limited minority-class information to learn from, making recall for AI-generated text especially weak. Future considerations in manually expanding the three by generated texts could be deemed useful if AI detection is considered most important in future prediction use cases.
@@ -422,6 +435,8 @@ Finally, I used classification_report and confusion_matrix to measure precision,
 
 ```python
 # Cross validation (CV)
+logging.info("------Analysis Complexity------")
+
 from sklearn.model_selection import StratifiedKFold, cross_val_score, RepeatedStratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
@@ -468,7 +483,7 @@ logging.info(f"CV results: {cv_results}")
 ```
 
                      Model  Mean F1 Macro   Std Dev
-    0           Linear SVM       0.572377  0.213445
+    0           Linear SVM       0.582422  0.186749
     1  Logistic Regression       0.620596  0.179358
     2          Naive Bayes       0.666213  0.236023
 
@@ -496,6 +511,8 @@ logging.info(f"best model is the naive bayes model - we've fit MultinomialNB")
 
 
 ```python
+logging.info("------Visualize Results------")
+
 plt.figure(figsize=(8,5))
 
 plt.bar(cv_results["Model"], cv_results["Mean F1 Macro"], color="xkcd:sky blue")
