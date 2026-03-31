@@ -419,7 +419,7 @@ Why F1 Macro: Accuracy is majorly misleading as there are way more human generat
 
 Why Repeated Stratifying: Because there are only 3 AI examples, one single train/test split can be very unstable. So repeated stratifying allows for a selection based stratified system that can re-select the AI texts.
 
-From the above Cross validation, it appears Naive Bayes model won with e highest f1 macro score of around 0.666 and the standard deviation of around 0.236. Here is the confusion matrix that results (then plotted below in **Visualize Results**)
+From the above Cross validation, it appears Naive Bayes model achieved the highest f1 macro score of around 0.666 and the standard deviation of around 0.236. Here is the confusion matrix that results (then plotted below in **Visualize Results**)
 
 
 ```python
