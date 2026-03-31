@@ -132,7 +132,7 @@ SELECT * FROM read_parquet('../data/parquet_version/Essay_metadata.parquet')
 
 
 
-    <_duckdb.DuckDBPyConnection at 0x136b09a30>
+    <_duckdb.DuckDBPyConnection at 0x1733b73b0>
 
 
 
@@ -347,6 +347,14 @@ print(confusion_matrix_model)
      [  1   0]]
 
 
+    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+
+
 Accuracy Reflection:
 
 Although the model achieved very high overall accuracy, it failed to correctly classify the single AI-generated essay in the train-test-split's test set. This shows that raw accuracy is misleading for this project because the dataset is extremely imbalanced. With only three AI-generated samples in the full dataset, the classifier has very limited minority-class information to learn from, making recall for AI-generated text especially weak. Future considerations in manually expanding the three by generated texts could be deemed useful if AI detection is considered most important in future prediction use cases.
@@ -410,7 +418,7 @@ print(cv_results)
 ```
 
                      Model  Mean F1 Macro   Std Dev
-    0           Linear SVM       0.561226  0.216428
+    0           Linear SVM       0.528808  0.180946
     1  Logistic Regression       0.620596  0.179358
     2          Naive Bayes       0.666213  0.236023
 
@@ -530,7 +538,17 @@ Final visualization of F1-Scores:
 ```python
 plt.figure(figsize=(8,5))
 
-plt.bar(cv_results["Model"], cv_results["Mean F1 Macro"], color="xkcd:sky blue")
+bars = plt.bar(cv_results["Model"], cv_results["Mean F1 Macro"], color="xkcd:sky blue")
+
+for bar in bars:
+    height = bar.get_height()
+    plt.text(
+        bar.get_x() + bar.get_width()/2,
+        height + 0.01,
+        f"{height:.3f}",
+        ha="center",
+        va="bottom"
+    )
 
 plt.gca().spines['top'].set_visible(False)
 plt.gca().spines['right'].set_visible(False)
