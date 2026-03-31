@@ -4,7 +4,7 @@ csv -> Parquet -> duckdb -> modeling
 
 ## Data Preparation
 
-#### Load in csvs from ../data/csv_version/
+Load in csvs from ../data/csv_version/
 
 
 ```python
@@ -80,7 +80,7 @@ print("\nEssay_metadata null counts:\n", essay_metadata.isnull().sum())
 essay["text"] = essay["text"].str.strip()
 ```
 
-#### CSV -> Parquet files
+CSV -> Parquet files
 
 
 ```python
@@ -91,7 +91,7 @@ prompt.to_parquet("../data/parquet_version/Prompt.parquet", index=False)
 essay_metadata.to_parquet("../data/parquet_version/Essay_metadata.parquet", index=False)
 ```
 
-#### Parquet files -> DuckDB use
+Parquet files -> DuckDB use
 
 ## Query
 
@@ -211,7 +211,7 @@ print("\n", df["label_id"].value_counts(normalize=True))
 
 When checking the final df from loading the parquets into DuckDB then creating features for later ML model testing, it appears there are the correct 3 AI texts and 1375 human generated texts, along with the correct 1378 total rows, and no missing essay foreign key matches.
 
-### Exploratory Data Analysis
+Exploratory Data Analysis
 
 
 ```python
