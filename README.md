@@ -8,7 +8,9 @@ This repository contains a Data by Design project 1, focused on early detection 
 
 **Computing ID**: rkf9wd
 
-**DOI**: 10.4320/Spring2026.project1.ai-news-detection.rkf9wd
+**DOI**: https://doi.org/10.5281/zenodo.19340926
+
+[![DOI](https://zenodo.org/badge/1196225252.svg)](https://doi.org/10.5281/zenodo.19340926)
 
 
 <br> 
@@ -18,6 +20,8 @@ This repository contains a Data by Design project 1, focused on early detection 
 **Data**: https://github.com/kayla-hekim/DS-4320-Project-1-From-Text-to-Integrity/tree/main/data
 1. csv_version: contains all data as csv files
 2. parquet_version: contains all data converted into parquet format
+
+Within OneDrive folder in same format of csv_version and parquet_version: https://onedrive.live.com/?id=%2Fpersonal%2F928157fc4e26bd54%2FDocuments%2FDocuments%2FDS4320%5Fproj1%5Frkf9wd&viewid=2523da70%2D0f0d%2D4ad4%2Da20b%2D4b150358a136&view=0
 
 <br>
 
@@ -101,8 +105,8 @@ This repository contains a Data by Design project 1, focused on early detection 
 **Code Table**: 
 | File Name                      | Description                                                                                                                                        | Code                                                                                   | Link |
 |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|------|
-| train_essays.csv | Dataset from the Kaggle competition "LLM - Detect AI Generated Text"<br> containing essays labeled as AI-generated or human-written. | og = pd.read_csv("train_essays.csv")<br> # ensure train_essays.csv in same dir as code | [CSV Link](https://drive.google.com/file/d/1_7xqKKuZ9ijVEAUmLO7ZMo747G8qddrj/view?usp=sharing) |
-| train_prompts.csv | Contains unique prompt information associated with each essay,<br>including the prompt name, instructions given to the writer, and source<br> text used to guide the response. | prompts = pd.read_csv("train_prompts.csv")<br> # ensure train_prompts.csv in same dir as code | [CSV Link](https://drive.google.com/file/d/1iJdRgro5609CZugC6192B5RjHxbQiyJm/view?usp=sharing) |
+| train_essays.csv | Dataset from the Kaggle competition "LLM - Detect AI Generated Text"<br> containing essays labeled as AI-generated or human-written. | og = pd.read_csv("train_essays.csv")<br> # ensure train_essays.csv in same dir as code | [CSV Link](https://1drv.ms/x/c/928157fc4e26bd54/IQCGYdVQ6MxiTpEJ0nw2z2ekAbY2dYB4jvJq5CtdzbWmvik?e=taW2wO) |
+| train_prompts.csv | Contains unique prompt information associated with each essay,<br>including the prompt name, instructions given to the writer, and source<br> text used to guide the response. | prompts = pd.read_csv("train_prompts.csv")<br> # ensure train_prompts.csv in same dir as code | [CSV Link](https://1drv.ms/x/c/928157fc4e26bd54/IQDF8dz0SOXSTpcm_UJ0f-7HAZp8exzRS52Yuo2r1pyLyVc?e=r1ev8g) |
 
 <!-- https://www.kaggle.com/competitions/llm-detect-ai-generated-text/data?select=train_essays.csv -->
 
@@ -129,10 +133,10 @@ This repository contains a Data by Design project 1, focused on early detection 
 
 | Table Name     | Description                                             | Link |
 |----------------|---------------------------------------------------------|------|
-| Essay          | Contains essay text data with unique identifiers        | [CSV Link](https://drive.google.com/file/d/1bTgW9vZc_bG8mM5ZC50nEmbbb78XNE77/view?usp=sharing) |
-| Label          | Contains label definitions for AI vs human text         | [CSV Link](https://drive.google.com/file/d/1hO5IZO7uty_2hL--0cBp3dmV6uT6LxxA/view?usp=drive_link) |
-| Prompt         | Contains prompt identifiers and descriptions for essays | [CSV Link](https://drive.google.com/file/d/10HRjFksPWjGjRbip_VuIBcvxVj6Obzvy/view?usp=sharing) |
-| Essay_metadata | Links essays to prompts and labels using foreign keys   | [CSV Link](https://drive.google.com/file/d/1uIOC1SuThuJn5jBwRWelHRYh4a3tILIt/view?usp=sharing) |
+| Essay          | Contains essay text data with unique identifiers        | [CSV Link](https://1drv.ms/x/c/928157fc4e26bd54/IQBq11mr824_TJJfg9jQ-QZeAdm4lCZhan9xrxEZ52o3HDk?e=iM0yuh) |
+| Label          | Contains label definitions for AI vs human text         | [CSV Link](https://1drv.ms/x/c/928157fc4e26bd54/IQCJuRdTmBkOSa2b_A4oXnXBAQcE4EDqA_H3VT-nr2jX4mo?e=Cl1rcb) |
+| Prompt         | Contains prompt identifiers and descriptions for essays | [CSV Link](https://1drv.ms/x/c/928157fc4e26bd54/IQCJuRdTmBkOSa2b_A4oXnXBAQcE4EDqA_H3VT-nr2jX4mo?e=Cl1rcb) |
+| Essay_metadata | Links essays to prompts and labels using foreign keys   | [CSV Link](https://1drv.ms/x/c/928157fc4e26bd54/IQB0OrxoJ1X-SLfN10Zfth2QAc4J2hWbN99cmRkYYy0T0KU?e=eKRp96) |
 
 <br>
 

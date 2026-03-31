@@ -1,2 +1,5 @@
 data/turn_csv_parquet.ipynb
 .DS_Store
+*.log
+*.duckdb
+*.wal
