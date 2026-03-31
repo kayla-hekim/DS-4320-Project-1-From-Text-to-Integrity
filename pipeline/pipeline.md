@@ -216,7 +216,7 @@ logging.info("Forming features of word_count, sentence_count, avg_sentence_lengt
 print("Rows in joined dataframe:", len(df))
 logging.info(f"Rows in joined dataframe: {len(df)}")
 print("Unique essay IDs in joined df:", df["essay_id"].nunique())
-logging.info(f"Unique essay IDs in joined df: {df["essay_id"].nunique()}")
+logging.info(f"Unique essay IDs in joined df: {df['essay_id'].nunique()}")
 
 
 # how many missing essays are there? (0)
@@ -234,10 +234,10 @@ logging.info(f"Missing essay foreign key matches: {missing_essays}")
 
 # printing value counts of label names vs id
 print("\n", df["label_name"].value_counts())
-logging.info(f"Count of label names unique: {df["label_name"].value_counts()}")
+logging.info(f"Count of label names unique: {df['label_name'].value_counts()}")
 
 print("\n", df["label_id"].value_counts(normalize=True))
-logging.info(f"Count of label ids unique: {df["label_id"].value_counts(normalize=True)}")
+logging.info(f"Count of label ids unique: {df['label_id'].value_counts(normalize=True)}")
 ```
 
     Rows in joined dataframe: 1378
@@ -483,7 +483,7 @@ logging.info(f"CV results: {cv_results}")
 ```
 
                      Model  Mean F1 Macro   Std Dev
-    0           Linear SVM       0.582422  0.186749
+    0           Linear SVM       0.551825  0.236706
     1  Logistic Regression       0.620596  0.179358
     2          Naive Bayes       0.666213  0.236023
 
