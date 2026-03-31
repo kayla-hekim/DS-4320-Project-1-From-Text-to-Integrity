@@ -8,6 +8,19 @@ Load in csvs from ../data/csv_version/
 
 
 ```python
+import logging
+
+logging.basicConfig(
+    filename="pipeline.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+logging.info("Pipeline started")
+```
+
+
+```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -21,6 +34,10 @@ essay = pd.read_csv('../data/csv_version/Essay.csv')
 label = pd.read_csv('../data/csv_version/Label.csv')
 prompt = pd.read_csv('../data/csv_version/Prompt.csv')
 essay_metadata = pd.read_csv('../data/csv_version/Essay_metadata.csv')
+
+logging.info("------Data Preparation------")
+
+logging.info("Read in the csvs from ../data/csv_version")
 ```
 
 
@@ -30,6 +47,8 @@ print("Essay duplicate essay_id count:", essay["essay_id"].duplicated().sum())
 print("Prompt duplicate prompt_id count:", prompt["prompt_id"].duplicated().sum())
 print("Label duplicate label_id count:", label["label_id"].duplicated().sum())
 # print("Essay_metadata duplicate label_id count:", essay_metadata.duplicated().sum()) # not rly duplication here, but can check
+
+logging.info("Found duplicates - should all be 0 in each essay, label, prompt csv/dfs")
 ```
 
     Essay duplicate essay_id count: 0
@@ -44,6 +63,8 @@ print("\nEssay null counts:\n", essay.isnull().sum())
 print("\nPrompt null counts:\n", prompt.isnull().sum())
 print("\nLabel null counts:\n", label.isnull().sum())
 print("\nEssay_metadata null counts:\n", essay_metadata.isnull().sum())
+
+logging.info("Found nulls - should all be 0 in each essay, label, prompt, essay_metadata csv/dfs")
 ```
 
     
@@ -78,6 +99,8 @@ print("\nEssay_metadata null counts:\n", essay_metadata.isnull().sum())
 
 # remove whitespace
 essay["text"] = essay["text"].str.strip()
+
+logging.info("Stripped whitespace at beginning/end of each text in essay")
 ```
 
 CSV -> Parquet files
@@ -89,6 +112,9 @@ essay.to_parquet("../data/parquet_version/Essay.parquet", index=False)
 label.to_parquet("../data/parquet_version/Label.parquet", index=False)
 prompt.to_parquet("../data/parquet_version/Prompt.parquet", index=False)
 essay_metadata.to_parquet("../data/parquet_version/Essay_metadata.parquet", index=False)
+
+logging.info("Turned loaded/transformed csv into parquet and stored in ../data/parquet_version/")
+logging.info("\n\n")
 ```
 
 Parquet files -> DuckDB use
@@ -101,6 +127,8 @@ Parquet files -> DuckDB use
 import duckdb
 
 con = duckdb.connect("./project1.duckdb")
+
+logging.info("Connected to duckdb in project1.duckdb")
 ```
 
 Queries from parquet to load in duckdb (They work):
@@ -108,52 +136,58 @@ Queries from parquet to load in duckdb (They work):
 
 ```python
 # create all 4 tables
-con.execute("""
-CREATE OR REPLACE TABLE Essay AS
-SELECT * FROM read_parquet('../data/parquet_version/Essay.parquet')
-""")
+try:
+    con.execute("""
+        CREATE OR REPLACE TABLE Essay AS
+        SELECT * FROM read_parquet('../data/parquet_version/Essay.parquet')
+    """)
+    logging.info("created essay table from Essay.parquet")
 
-con.execute("""
-CREATE OR REPLACE TABLE Label AS
-SELECT * FROM read_parquet('../data/parquet_version/Label.parquet')
-""")
+    con.execute("""
+        CREATE OR REPLACE TABLE Label AS
+        SELECT * FROM read_parquet('../data/parquet_version/Label.parquet')
+    """)
+    logging.info("created essay table from Label.parquet")
 
-con.execute("""
-CREATE OR REPLACE TABLE Prompt AS
-SELECT * FROM read_parquet('../data/parquet_version/Prompt.parquet')
-""")
+    con.execute("""
+        CREATE OR REPLACE TABLE Prompt AS
+        SELECT * FROM read_parquet('../data/parquet_version/Prompt.parquet')
+    """)
+    logging.info("created essay table from Prompt.parquet")
 
-con.execute("""
-CREATE OR REPLACE TABLE Essay_metadata AS
-SELECT * FROM read_parquet('../data/parquet_version/Essay_metadata.parquet')
-""")
+    con.execute("""
+        CREATE OR REPLACE TABLE Essay_metadata AS
+        SELECT * FROM read_parquet('../data/parquet_version/Essay_metadata.parquet')
+    """)
+    logging.info("created essay table from Essay_metadata.parquet")
+    
+except Exception as e:
+    logging.error(f"Error creating DuckDB tables: {e}")
+    print("Table creation failed:", e)
 ```
-
-
-
-
-    <_duckdb.DuckDBPyConnection at 0x1733b73b0>
-
-
 
 
 ```python
 # joining all 4 tables to form dataframe
+logging.info("Starting joining of tables to form df")
+
 df = con.execute("""
-SELECT
-    e.essay_id,
-    e.text,
-    p.prompt_name,
-    l.label_id,
-    l.label_name
-FROM Essay e
-JOIN Essay_metadata em
-    ON e.essay_id = em.essay_id
-JOIN Prompt p
-    ON em.prompt_id = p.prompt_id
-JOIN Label l
-    ON em.label_id = l.label_id
+    SELECT
+        e.essay_id,
+        e.text,
+        p.prompt_name,
+        l.label_id,
+        l.label_name
+    FROM Essay e
+    JOIN Essay_metadata em
+        ON e.essay_id = em.essay_id
+    JOIN Prompt p
+        ON em.prompt_id = p.prompt_id
+    JOIN Label l
+        ON em.label_id = l.label_id
 """).df()
+
+logging.info("finished joining all tables into df")
 ```
 
 
@@ -167,6 +201,8 @@ df["vocab_diversity"] = df["text"].apply(
     lambda x: len(set(x.split())) / max(len(x.split()), 1)
 )
 df["punctuation_count"] = df["text"].str.count(r"[.,!?;:]")
+
+logging.info("Forming features of word_count, sentence_count, avg_sentence_length, vocab_diversity, and punctuation_count")
 ```
 
 
@@ -175,23 +211,30 @@ df["punctuation_count"] = df["text"].str.count(r"[.,!?;:]")
 
 # rows and unique ids to see duplication check:
 print("Rows in joined dataframe:", len(df))
+logging.info(f"Rows in joined dataframe: {len(df)}")
 print("Unique essay IDs in joined df:", df["essay_id"].nunique())
+logging.info(f"Unique essay IDs in joined df: {df["essay_id"].nunique()}")
 
 
 # how many missing essays are there? (0)
 missing_essays = con.execute("""
-SELECT COUNT(*)
-FROM Essay_metadata em
-LEFT JOIN Essay e
-ON em.essay_id = e.essay_id
-WHERE e.essay_id IS NULL
+    SELECT COUNT(*)
+    FROM Essay_metadata em
+    LEFT JOIN Essay e
+    ON em.essay_id = e.essay_id
+    WHERE e.essay_id IS NULL
 """).fetchone()[0]
 
 print("Missing essay foreign key matches:", missing_essays)
+logging.info(f"Missing essay foreign key matches: {missing_essays}")
+
 
 # printing value counts of label names vs id
 print("\n", df["label_name"].value_counts())
+logging.info(f"Count of label names unique: {df["label_name"].value_counts()}")
+
 print("\n", df["label_id"].value_counts(normalize=True))
+logging.info(f"Count of label ids unique: {df["label_id"].value_counts(normalize=True)}")
 ```
 
     Rows in joined dataframe: 1378
@@ -232,11 +275,13 @@ plt.xlabel("Label")
 plt.ylabel("Count")
 
 plt.show()
+
+logging.info(f"Plotted the counts of human vs AI generated essays in the original essay csv")
 ```
 
 
     
-![png](pipeline_files/pipeline_20_0.png)
+![png](pipeline_files/pipeline_21_0.png)
     
 
 
@@ -254,11 +299,13 @@ plt.xlabel("Label")
 plt.ylabel("Word Count")
 
 plt.show()
+
+logging.info(f"Plotted the word counts by label (0 human, 1 AI) and their uncertainties on box plot")
 ```
 
 
     
-![png](pipeline_files/pipeline_21_0.png)
+![png](pipeline_files/pipeline_22_0.png)
     
 
 
@@ -293,6 +340,7 @@ X_train_text, X_test_text, X_train_style, X_test_style, y_train, y_test = train_
     stratify=df["label_id"]
 )
 
+logging.info(f"Train test split on word_count, sentence_count, avg_sentence_length, vocab_diversity, and punctuation_count")
 ```
 
 
@@ -306,6 +354,8 @@ X_test_text_vector = vectorizer.transform(X_test_text)
 # combine text + style features
 X_train = hstack([X_train_text_vector, X_train_style.values])
 X_test = hstack([X_test_text_vector, X_test_style.values])
+
+logging.info(f"Vectorized/created matrix encodings of the words in the texts")
 ```
 
 
@@ -315,6 +365,8 @@ svm_model = LinearSVC(class_weight="balanced", max_iter=5000)
 
 svm_model.fit(X_train, y_train)
 preds = svm_model.predict(X_test)
+
+logging.info(f"Predicted AI or human generated with Support vector machine classifier")
 ```
 
 accuracy scores:
@@ -328,6 +380,8 @@ print(class_report)
 print("\n\nconfusion matrix: ")
 confusion_matrix_model = confusion_matrix(y_test, preds)
 print(confusion_matrix_model)
+
+logging.info(f"generated confusion matrix")
 ```
 
     classification report:
@@ -345,14 +399,6 @@ print(confusion_matrix_model)
     confusion matrix: 
     [[275   0]
      [  1   0]]
-
-
-    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-    /opt/anaconda3/lib/python3.12/site-packages/sklearn/metrics/_classification.py:1531: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-      _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
 
 
 Accuracy Reflection:
@@ -382,6 +428,8 @@ from sklearn.naive_bayes import MultinomialNB
 
 import warnings
 warnings.filterwarnings('ignore') # only uncomment if you wish to see the warnings due to the imbalanced classes of human and AI gen.
+
+logging.info(f"starting cross validation with linear SVM, logreg, and naive bayes")
 
 models = {
     "Linear SVM": LinearSVC(class_weight="balanced", max_iter=5000),
@@ -415,10 +463,12 @@ for name, model in models.items():
 
 cv_results = pd.DataFrame(results)
 print(cv_results)
+logging.info(f"CV results: {cv_results}")
+
 ```
 
                      Model  Mean F1 Macro   Std Dev
-    0           Linear SVM       0.528808  0.180946
+    0           Linear SVM       0.572377  0.213445
     1  Logistic Regression       0.620596  0.179358
     2          Naive Bayes       0.666213  0.236023
 
@@ -437,6 +487,9 @@ final_model = MultinomialNB()
 
 final_model.fit(X_train, y_train)
 preds = final_model.predict(X_test)
+
+logging.info(f"best model is the naive bayes model - we've fit MultinomialNB")
+
 ```
 
 ## Visualize Results
@@ -455,11 +508,14 @@ plt.xlabel("Model Type")
 plt.ylabel("Mean Macro F1 Score")
 
 plt.show()
+
+logging.info(f"plotted CV model comparison")
+
 ```
 
 
     
-![png](pipeline_files/pipeline_38_0.png)
+![png](pipeline_files/pipeline_39_0.png)
     
 
 
@@ -476,11 +532,13 @@ cm_naive_bayes = ConfusionMatrixDisplay.from_predictions(
 plt.title("Confusion Matrix: Final Naive Bayes Model")
 
 plt.show()
+logging.info(f"plotted confusion matrix for naive bayes model (best)")
+
 ```
 
 
     
-![png](pipeline_files/pipeline_40_0.png)
+![png](pipeline_files/pipeline_41_0.png)
     
 
 
@@ -561,10 +619,12 @@ plt.text(x=-.72, y=.65, s='(Mean Macro F1-score)')
 # plt.ylabel("Mean Macro F1 Score")
 
 plt.show()
+logging.info(f"plotted final CV model comparson on macro f1 scores")
+
 ```
 
 
     
-![png](pipeline_files/pipeline_48_0.png)
+![png](pipeline_files/pipeline_49_0.png)
     
 
