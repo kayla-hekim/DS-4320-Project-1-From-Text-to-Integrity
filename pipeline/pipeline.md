@@ -351,7 +351,7 @@ Accuracy Reflection:
 
 Although the model achieved very high overall accuracy, it failed to correctly classify the single AI-generated essay in the train-test-split's test set. This shows that raw accuracy is misleading for this project because the dataset is extremely imbalanced. With only three AI-generated samples in the full dataset, the classifier has very limited minority-class information to learn from, making recall for AI-generated text especially weak. Future considerations in manually expanding the three by generated texts could be deemed useful if AI detection is considered most important in future prediction use cases.
 
-## Analysis Rationale:
+## Analysis Rationale
 
 I started the analysis by cleaning the data, by testing if there were null or duplicate values (there were not). Then, I removed trailing and leading whitespaces for the sake of standardizing formats, while not changing the texts’ style choices themselves for the sake of more original predictions with the SVC model. Finally, I counted the AI and human generated texts with a bar plot to visualize the observed imbalance, along with a Word Count by Essay Label with Uncertainty boxplot to test the range and area of uncertainty among the points.
 
